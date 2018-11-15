@@ -21,6 +21,6 @@ Function Get-PayPalLocalToken {
         UserToken = [PoShPal_AccessToken]::new($obj.Token,$obj.Expires)
         #ClientCredentials = [eBayAPI_ClientCredentials]::new($obj.ClientID,$obj.ClientSecret,$obj.RUName)
     }#>
-    $global:PayPalAuthConfig = [PoShPal_AccessToken]::new($obj.Token,$obj.Expires)
+    $global:PayPalAuthConfig = [PoShPal_AccessToken]::new($obj.AccessToken,$obj.Expires)
     $PayPalAuthConfig
 }
