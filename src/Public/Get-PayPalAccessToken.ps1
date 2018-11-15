@@ -20,5 +20,6 @@ Function Get-PayPalAccessToken {
     ) -join ''
 
     $response = Invoke-WebRequest -Uri $baseUri -Body $body -Headers $headers -Method Post
-    $response.Content | ConvertFrom-Json
+    $AccessToken = [PoShPal_AccessToken]::new($($response.Content | ConvertFrom-Json))
+    Save-PayPalAccessToken $AccessToken
 }
