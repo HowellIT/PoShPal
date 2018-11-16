@@ -2,7 +2,7 @@
 Function Get-PayPalOrder {
     Param(
         [string]$OrderID,
-        [string]$AccessToken = $PayPalAuthConfig.AccessToken
+        [string]$AccessToken = $PayPalAuthConfig.AccessToken.AccessToken
     )
     $baseUri = 'https://api.paypal.com/v1/checkout/orders'
 

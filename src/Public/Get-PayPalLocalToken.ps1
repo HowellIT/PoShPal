@@ -10,17 +10,19 @@ Function Get-PayPalLocalToken {
         $creds = New-Object pscredential('PoShPal',$ss)
         $creds.GetNetworkCredential().Password
     }
+    $combinedProperties = @()
     $properties = 'Expires'
-    $propertiesToConvert = 'AccessToken' #,'ClientID','ClientSecret'
-    [string[]]$combinedProperties = $properties,$propertiesToConvert
+    $propertiesToConvert = 'AccessToken','ClientID','ClientSecret'
+    $combinedProperties += $properties
+    $combinedProperties += $propertiesToConvert
     $obj = Get-ItemProperty $RegistryPath | Select $combinedProperties
     ForEach($property in $propertiesToConvert){
         $obj."$property" = ConvertTo-PlainText $obj."$property"
     }
-    <#$global:PayPalAuthConfig = [PSCustomObject]@{
-        UserToken = [PoShPal_AccessToken]::new($obj.Token,$obj.Expires)
-        #ClientCredentials = [eBayAPI_ClientCredentials]::new($obj.ClientID,$obj.ClientSecret,$obj.RUName)
+    $global:PayPalAuthConfig = [PSCustomObject]@{
+        AccessToken = [PoShPal_AccessToken]::new($obj.AccessToken,$obj.Expires)
+        ClientCredentials = [PoShPal_ClientCredentials]::new($obj.ClientID,$obj.ClientSecret)
     }#>
-    $global:PayPalAuthConfig = [PoShPal_AccessToken]::new($obj.AccessToken,$obj.Expires)
+    #$global:PayPalAuthConfig = [PoShPal_AccessToken]::new($obj.AccessToken,$obj.Expires)
     $PayPalAuthConfig
 }
