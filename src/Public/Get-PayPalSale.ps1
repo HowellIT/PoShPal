@@ -1,12 +1,12 @@
-# https://developer.paypal.com/docs/api/orders/v1/#orders_get
-Function Get-PayPalOrder {
+# https://developer.paypal.com/docs/api/payments/v1/#sale_get
+Function Get-PayPalSale {
     Param(
-        [string]$OrderID,
+        [string]$SaleID,
         [string]$AccessToken = $PayPalAuthConfig.AccessToken.AccessToken
     )
-    $baseUri = 'https://api.paypal.com/v1/checkout/orders'
+    $baseUri = 'https://api.paypal.com/v1/payments/sale'
 
-    $uri = "$baseUri/$orderID"
+    $uri = "$baseUri/$SaleID"
 
     $headers = @{
         'Authorization' = "Bearer $AccessToken"
