@@ -29,8 +29,8 @@ This will store your credentials securely in the registry and in a global variab
 
 ## How to query
 
-To get a single order from PayPal:
+To get information on a single sale from PayPal:
 
 ```PowerShell
-Get-PayPalOrder -OrderID 'XXXXXXXXXXXXXXXXX'
+Get-PayPalSale -SaleID 'XXXXXXXXXXXXXXXXX'
 ```
