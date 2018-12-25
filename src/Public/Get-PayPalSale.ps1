@@ -1,7 +1,7 @@
 # https://developer.paypal.com/docs/api/payments/v1/#sale_get
 Function Get-PayPalSale {
     Param(
-        [ValidateNotNullOrEmpty]
+        [ValidateNotNullOrEmpty()]
         [string]$SaleID,
         [string]$AccessToken = $PayPalAuthConfig.AccessToken.AccessToken
     )
