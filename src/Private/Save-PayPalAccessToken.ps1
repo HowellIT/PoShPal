@@ -11,5 +11,4 @@ Function Save-PayPalAccessToken {
     }
     New-ItemProperty -Path $RegistryPath -Name 'Expires' -Value $Token.Expires -Force | Out-Null
     New-ItemProperty -Path $RegistryPath -Name 'AccessToken' -Value (ConvertFrom-SecureString (ConvertTo-SecureString $Token.AccessToken -AsPlainText -Force)) -Force | Out-Null
-    Get-PayPalLocalToken
 }

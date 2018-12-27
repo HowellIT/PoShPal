@@ -26,4 +26,5 @@ Function Get-PayPalAccessToken {
     $creds = [PoShPal_ClientCredentials]::new($ClientID,$ClientSecret)
     Save-PayPalAccessToken $AccessToken
     Save-PayPalClientCredentials $creds
+    Get-PayPalLocalToken
 }
