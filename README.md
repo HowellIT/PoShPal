@@ -29,8 +29,14 @@ This will store your credentials securely in the registry and in a global variab
 
 ## How to query
 
-To get information on a single sale from PayPal:
+To get information on a single sale from PayPal (you being the seller):
 
 ```PowerShell
 Get-PayPalSale -SaleID 'XXXXXXXXXXXXXXXXX'
+```
+
+Or to query your transaction history for the past week:
+
+```PowerShell
+Get-PayPalTransactions -StartDate (Get-Date).AddDays(-7)
 ```
