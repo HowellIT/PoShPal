@@ -178,6 +178,7 @@ Function Get-PayPalTransactions {
     $body = @{
         start_date = (Get-Date $StartDate -Format o) -replace '(\.\d+)',''
         end_date = (Get-Date $EndDate -Format o) -replace '(\.\d+)',''
+        fields = 'all'
     }
 
     If($PSBoundParameters.ContainsKey('TransactionId')){
