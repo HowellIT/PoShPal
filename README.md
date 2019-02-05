@@ -6,6 +6,8 @@ This module is designed to work with the PayPal API. It is under development (PR
 
 Only an experimental build has been done with some minor testing.
 
+If you would like to contribute to PoShPal, refer [CONTRIBUTING.md](https://github.com/HowellIT/PoShPal/blob/master/.github/CONTRIBUTING.md)
+
 ## How to set up
 Download or clone this repo and:
 
