@@ -11,7 +11,7 @@ Foreach ($Module in $DependentModules){
     }
     Import-Module $module -ErrorAction Stop
 }
-$env:ModuleTempDir = "C:\temp" #$env:TEMP
+$env:ModuleTempDir = "$PSScriptRoot\Build" #$env:TEMP
 $env:ModuleName = "PoShPal"
 $env:Author = "Anthony Howell"
 $env:ModuleVersion = "0.0.3"
