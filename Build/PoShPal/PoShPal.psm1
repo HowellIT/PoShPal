@@ -1,4 +1,4 @@
-Class PoShPal_AccessToken {
+﻿Class PoShPal_AccessToken {
     [string]$AccessToken
     [string]$Expires
 
@@ -35,50 +35,6 @@ Class PoShPal_ClientCredentials {
         $this.ClientID = $ClientID
         $this.ClientSecret = $ClientSecret
     }
-}
-Function Confirm-PayPalAccessToken {
-    Param(
-        [ValidateNotNullOrEmpty()]
-        [PoShPal_AccessToken]$AccessToken,
-        [ValidateNotNullOrEmpty()]
-        [PoShPal_ClientCredentials]$ClientCredentials = $PayPalAuthConfig.ClientCredentials
-    )
-    # this will need more than just checking expiration date
-    If(($AccessToken.Expires -lt (Get-Date)) -and ($ClientCredentials)){
-        Try{
-            Get-PayPalAccessToken -ClientID $ClientCredentials.ClientID -ClientSecret $ClientCredentials.ClientSecret
-            $true
-        }Catch{
-            $false
-        }
-    }Else{
-        $true
-    }
-}
-Function Save-PayPalAccessToken {
-    Param(
-        [Parameter(
-            Mandatory = $true
-        )]
-        [PoShPal_AccessToken]$Token,
-        [string]$RegistryPath = 'HKCU:\Software\PoShPal'
-    )
-    If(-not(Test-Path $RegistryPath)){
-        New-Item $RegistryPath
-    }
-    New-ItemProperty -Path $RegistryPath -Name 'Expires' -Value $Token.Expires -Force | Out-Null
-    New-ItemProperty -Path $RegistryPath -Name 'AccessToken' -Value (ConvertFrom-SecureString (ConvertTo-SecureString $Token.AccessToken -AsPlainText -Force)) -Force | Out-Null
-}
-Function Save-PayPalClientCredentials {
-    Param(
-        [PoShPal_ClientCredentials]$Creds,
-        [string]$RegistryPath = 'HKCU:\Software\PoShPal'
-    )
-    If(-not(Test-Path $RegistryPath)){
-        New-Item $RegistryPath
-    }
-    New-ItemProperty -Path $RegistryPath -Name 'ClientID' -Value (ConvertFrom-SecureString (ConvertTo-SecureString $Creds.ClientID -AsPlainText -Force)) -Force | Out-Null
-    New-ItemProperty -Path $RegistryPath -Name 'ClientSecret' -Value (ConvertFrom-SecureString (ConvertTo-SecureString $Creds.ClientSecret -AsPlainText -Force)) -Force | Out-Null
 }
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Function Get-PayPalAccessToken {
@@ -187,4 +143,48 @@ Function Get-PayPalTransactions {
 
     $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $headers -Body $body
     $response.transaction_details
+}
+Function Confirm-PayPalAccessToken {
+    Param(
+        [ValidateNotNullOrEmpty()]
+        [PoShPal_AccessToken]$AccessToken,
+        [ValidateNotNullOrEmpty()]
+        [PoShPal_ClientCredentials]$ClientCredentials = $PayPalAuthConfig.ClientCredentials
+    )
+    # this will need more than just checking expiration date
+    If(($AccessToken.Expires -lt (Get-Date)) -and ($ClientCredentials)){
+        Try{
+            Get-PayPalAccessToken -ClientID $ClientCredentials.ClientID -ClientSecret $ClientCredentials.ClientSecret
+            $true
+        }Catch{
+            $false
+        }
+    }Else{
+        $true
+    }
+}
+Function Save-PayPalAccessToken {
+    Param(
+        [Parameter(
+            Mandatory = $true
+        )]
+        [PoShPal_AccessToken]$Token,
+        [string]$RegistryPath = 'HKCU:\Software\PoShPal'
+    )
+    If(-not(Test-Path $RegistryPath)){
+        New-Item $RegistryPath
+    }
+    New-ItemProperty -Path $RegistryPath -Name 'Expires' -Value $Token.Expires -Force | Out-Null
+    New-ItemProperty -Path $RegistryPath -Name 'AccessToken' -Value (ConvertFrom-SecureString (ConvertTo-SecureString $Token.AccessToken -AsPlainText -Force)) -Force | Out-Null
+}
+Function Save-PayPalClientCredentials {
+    Param(
+        [PoShPal_ClientCredentials]$Creds,
+        [string]$RegistryPath = 'HKCU:\Software\PoShPal'
+    )
+    If(-not(Test-Path $RegistryPath)){
+        New-Item $RegistryPath
+    }
+    New-ItemProperty -Path $RegistryPath -Name 'ClientID' -Value (ConvertFrom-SecureString (ConvertTo-SecureString $Creds.ClientID -AsPlainText -Force)) -Force | Out-Null
+    New-ItemProperty -Path $RegistryPath -Name 'ClientSecret' -Value (ConvertFrom-SecureString (ConvertTo-SecureString $Creds.ClientSecret -AsPlainText -Force)) -Force | Out-Null
 }

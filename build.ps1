@@ -1,19 +1,13 @@
-#Requires -Modules psake
-[cmdletbinding()]
 param(
-    [string[]]$Task = 'manual'
+    [string[]]$Task = 'ModuleBuild'
 )
 
-$DependentModules = @('Pester','Psake','PlatyPS')
+$DependentModules = @('PSDeploy','InvokeBuild') # Add pester
 Foreach ($Module in $DependentModules){
     If (-not (Get-Module $module -ListAvailable)){
-        Install-Module -name $Module -Scope CurrentUser
+        Install-Module -name $Module -Scope CurrentUser -Force
     }
     Import-Module $module -ErrorAction Stop
 }
-$env:ModuleTempDir = "$PSScriptRoot\Build" #$env:TEMP
-$env:ModuleName = "PoShPal"
-$env:Author = "Anthony Howell"
-$env:ModuleVersion = "0.0.3"
 # Builds the module by invoking psake on the build.psake.ps1 script.
-Invoke-PSake $PSScriptRoot\psake.ps1 -taskList $Task
+Invoke-Build $PSScriptRoot\PoShPal.build.ps1 -Task $Task
