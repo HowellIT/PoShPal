@@ -1,5 +1,6 @@
 $srcPath = "$PSScriptRoot\src"
 $buildPath = "$PSScriptRoot\build"
+$docPath = "$PSScriptRoot\docs"
 $moduleName = "PoShPal"
 $modulePath = "$buildPath\$moduleName"
 $author = 'Anthony Howell'
@@ -9,12 +10,16 @@ task Clean {
     If(Get-Module $moduleName){
         Remove-Module $moduleName
     }
-    If(Test-Path $buildPath){
-        $null = Remove-Item $buildPath -Recurse -ErrorAction Ignore
+    If(Test-Path $modulePath){
+        $null = Remove-Item $modulePath -Recurse -ErrorAction Ignore
     }
 }
 
-task ModuleBuild Clean, {
+task DocBuild {
+    New-ExternalHelp $docPath -OutputPath "$modulePath\EN-US"
+}
+
+task ModuleBuild Clean, DocBuild, {
     $classFiles = Get-ChildItem "$srcPath\Classes" -Filter *.ps1 -File
     $pubFiles = Get-ChildItem "$srcPath\public" -Filter *.ps1 -File
     $privFiles = Get-ChildItem "$srcPath\private" -Filter *.ps1 -File
