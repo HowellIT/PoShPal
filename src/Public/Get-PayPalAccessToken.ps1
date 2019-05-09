@@ -6,7 +6,7 @@ Function Get-PayPalAccessToken {
         [ValidateNotNullOrEmpty()]
         [string]$ClientSecret = $PayPalAuthConfig.ClientCredentials.ClientSecret
     )
-    $baseUri = 'https://api.paypal.com/v1/oauth2/token.'
+    $baseUri = 'https://api.paypal.com/v1/oauth2/token'
 
     $encodedAuthorization = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$ClientID`:$ClientSecret"))
 

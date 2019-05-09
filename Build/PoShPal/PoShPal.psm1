@@ -1,4 +1,4 @@
-﻿Class PoShPal_AccessToken {
+Class PoShPal_AccessToken {
     [string]$AccessToken
     [string]$Expires
 
@@ -44,7 +44,7 @@ Function Get-PayPalAccessToken {
         [ValidateNotNullOrEmpty()]
         [string]$ClientSecret = $PayPalAuthConfig.ClientCredentials.ClientSecret
     )
-    $baseUri = 'https://api.paypal.com/v1/oauth2/token.'
+    $baseUri = 'https://api.paypal.com/v1/oauth2/token'
 
     $encodedAuthorization = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$ClientID`:$ClientSecret"))
 
@@ -65,6 +65,9 @@ Function Get-PayPalAccessToken {
     Save-PayPalAccessToken $AccessToken
     Save-PayPalClientCredentials $creds
     Get-PayPalLocalToken
+}
+Function Get-PayPalAuthConfig {
+    $PayPalAuthConfig
 }
 Function Get-PayPalLocalToken {
     Param(
@@ -143,6 +146,31 @@ Function Get-PayPalTransactions {
 
     $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $headers -Body $body
     $response.transaction_details
+}
+Function Set-PayPalAuthConfig {
+    param (
+        [Parameter(
+            Mandatory = $true
+        )]
+        [string]$ClientID,
+        [Parameter(
+            Mandatory = $true
+        )]
+        [string]$ClientSecret,
+        [Parameter(
+            Mandatory = $true
+        )]
+        [string]$AccessToken,
+        [Parameter(
+            Mandatory = $true
+        )]
+        [datetime]$AccessTokenExpirationDate
+    )
+    $Script:PayPalAuthConfig = [PSCustomObject]@{
+        AccessToken = [PoShPal_AccessToken]::new($AccessToken,$AccessTokenExpirationDate)
+        ClientCredentials = [PoShPal_ClientCredentials]::new($ClientID,$ClientSecret)
+    }
+
 }
 Function Confirm-PayPalAccessToken {
     Param(
