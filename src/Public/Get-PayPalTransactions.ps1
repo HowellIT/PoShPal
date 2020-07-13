@@ -8,14 +8,9 @@ Function Get-PayPalTransactions {
         [datetime]$EndDate = (Get-Date),
         [string]$AccessToken = $PayPalAuthConfig.AccessToken.AccessToken
     )
-    $baseUri = 'https://api.paypal.com/v1/reporting/transactions'
+    $baseUri = 'reporting/transactions'
 
     $uri = "$baseUri"
-
-    $headers = @{
-        'Authorization' = "Bearer $AccessToken"
-        'Content-Type' = 'application/json'
-    }
 
     $body = @{
         start_date = (Get-Date $StartDate -Format o) -replace '(\.\d+)',''
@@ -27,6 +22,8 @@ Function Get-PayPalTransactions {
         $body['transaction_id'] = $TransactionId
     }
 
-    $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $headers -Body $body
+    Write-Verbose "Body: $($body | ConvertTo-Json)"
+
+    $response = Invoke-PayPalRestMethod -Uri $uri -Method Get -Body $body
     $response.transaction_details
 }
