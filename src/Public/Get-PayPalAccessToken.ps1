@@ -24,7 +24,6 @@ Function Get-PayPalAccessToken {
     $response = Invoke-WebRequest -Uri $baseUri -Body $body -Headers $headers -Method Post
     $AccessToken = [PoShPal_AccessToken]::new($($response.Content | ConvertFrom-Json))
     $creds = [PoShPal_ClientCredentials]::new($ClientID,$ClientSecret)
-    Save-PayPalAccessToken $AccessToken
-    Save-PayPalClientCredentials $creds
+    Save-PayPalAuthConfig -Token $AccessToken -Creds $creds
     Get-PayPalLocalToken
 }
