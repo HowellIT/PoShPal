@@ -9,17 +9,19 @@ Function Set-PayPalAuthConfig {
         )]
         [string]$ClientSecret,
         [Parameter(
-            Mandatory = $true
+            Mandatory = $false
         )]
         [string]$AccessToken,
         [Parameter(
-            Mandatory = $true
+            Mandatory = $false
         )]
         [datetime]$AccessTokenExpirationDate
     )
-    $Script:PayPalAuthConfig = [PSCustomObject]@{
-        AccessToken = [PoShPal_AccessToken]::new($AccessToken,$AccessTokenExpirationDate)
+    $Global:PayPalAuthConfig = [PSCustomObject]@{
+        AccessToken = [PoShPal_AccessToken]::new()
         ClientCredentials = [PoShPal_ClientCredentials]::new($ClientID,$ClientSecret)
     }
-
+    if ($null -ne $AccessToken -and $null -ne $AccessTokenExpirationDate) {
+        $Global:PayPalAuthConfig.AccessToken = [PoShPal_AccessToken]::new($AccessToken,$AccessTokenExpirationDate)
+    }
 }

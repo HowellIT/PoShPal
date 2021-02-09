@@ -2,6 +2,8 @@ Class PoShPal_AccessToken {
     [string]$AccessToken
     [string]$Expires
 
+    PoShPal_AccessToken(){}
+
     PoShPal_AccessToken(
         [string]$access_token,
         [datetime]$expires

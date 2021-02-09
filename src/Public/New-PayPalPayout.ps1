@@ -14,7 +14,8 @@ Function New-PayPalPayout {
         )]
         [string]$EmailMessage,
         [string]$Note,
-        [PoshPal_PayoutItem[]]$PayoutItems
+        [PoshPal_PayoutItem[]]$PayoutItems,
+        [switch]$WhatIf
     )
     $uri = 'payments/payouts'
 
@@ -33,7 +34,9 @@ Function New-PayPalPayout {
         items = @(($PayoutItems | %{$_.ToHashtable()}))
     }
 
-    $Body | ConvertTo-Json -Depth 5
-
-    Invoke-PayPalRestMethod -Method Post -Uri $uri -Body ($body | ConvertTo-Json -Depth 5)
+    if ($WhatIf.IsPresent) {
+        $Body | ConvertTo-Json -Depth 5
+    } else {
+        Invoke-PayPalRestMethod -Method Post -Uri $uri -Body ($body | ConvertTo-Json -Depth 5)
+    }
 }

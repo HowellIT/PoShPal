@@ -1,6 +1,6 @@
 Function Get-PayPalLocalToken {
     Param(
-        [string]$RegistryPath = 'HKCU:\Software\PoShPal'
+        [string]$Path = (Get-PayPalAuthConfigSavePath)
     )
     Function ConvertTo-PlainText{
         Param(
@@ -15,7 +15,7 @@ Function Get-PayPalLocalToken {
     $propertiesToConvert = 'AccessToken','ClientID','ClientSecret'
     $combinedProperties += $properties
     $combinedProperties += $propertiesToConvert
-    $obj = Get-ItemProperty $RegistryPath | Select $combinedProperties
+    $obj = Get-Content "$Path\config.json" | ConvertFrom-Json | Select $combinedProperties
     ForEach($property in $propertiesToConvert){
         $obj."$property" = ConvertTo-PlainText $obj."$property"
     }
