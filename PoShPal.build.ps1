@@ -1,8 +1,7 @@
 param (
     [version]$Version = '0.0.1',
     [string]$NugetApiKey,
-    [string]$PreRelease,
-    [switch]$ReuseFormats
+    [string]$PreRelease
 )
 $srcPath = "$PSScriptRoot\src"
 $buildPath = "$PSScriptRoot\build"
@@ -15,10 +14,6 @@ Write-Host "Version: $($version)"
 
 # Clean out any previous builds
 task Clean {
-    if ($ReuseFormats.IsPresent) {
-        Write-Host 'Backing up format...'
-        $script:formats = Get-Content $modulePath\k.format.ps1xml
-    }
     if (Get-Module $moduleName) {
         Remove-Module $moduleName
     }
@@ -80,20 +75,6 @@ task ModuleBuild Clean, {
     foreach ($test in ($moduleScriptFiles | Where-Object { $_.FullName -match '(\\|\/)tests(\\|\/)[^\.]+\.tests\.ps1$' })) {
         Write-Host "Copying test file: '$($test.FullName)'"
         Copy-Item $test.FullName -Destination $modulePath
-    }
-
-    # Copy the formats.json
-    Copy-Item $srcPath\formats.json -Destination $modulePath
-
-    # Generate the formats
-    if ($ReuseFormats.IsPresent) {
-        Write-Host 'Restoring format...'
-        $formats | Out-File $modulePath\k.format.ps1xml
-    } else {
-        Write-Host "Generating format file, this may take a few seconds..."
-        . $srcPath\onload.ps1
-        . $srcPath\public\k.ps1
-        .\repoScripts\formatUpdater.ps1 -OutPath $modulePath\k.format.ps1xml
     }
 
     $moduleManifestData = @{
