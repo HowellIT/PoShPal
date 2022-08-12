@@ -1,5 +1,6 @@
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Function Get-PayPalAccessToken {
+    [cmdletbinding()]
     Param(
         [ValidateNotNullOrEmpty()]
         [string]$ClientID = $PayPalAuthConfig.ClientCredentials.ClientID,
